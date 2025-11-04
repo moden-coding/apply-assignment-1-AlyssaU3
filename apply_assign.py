@@ -2,16 +2,26 @@ import pandas as pd
 import numpy as np
 
 def assign_letter_grades(df):
-    pass
-
-
+    df['Grade'] = df['Exam_Score'].apply(lambda x: 'A' if x >= 90 else ('B' if x >= 80 else ('C' if x >= 70 else 'D')))
+    return df
 def calculate_adjusted_score(df):
-    pass
-
+    df["Adjusted_Score"]= df.apply(lambda row: row["Exam_Score"]+(row["Study_Hours"]*1.5)+(row["Attendance"]*10), axis=1)
+    return df
 
 def categorize_performance(df):
-    pass
+    df['Grade'] = df['Exam_Score'].apply(lambda x: 'A' if x >= 90 else ('B' if x >= 80 else ('C' if x >= 70 else 'D')))
 
+    def my_functon(df):
+        if df["Grade"]=="A" and df["Study_Hours"] >6:
+            return "Outstanding"
+        elif df["Grade"]=="B" and df["Attendance"] >=0.9:
+             return "Strong"
+        elif df["Grade"] in ["C","D"]:
+             return "Needs Improvement"
+        else: 
+            return "Average"
+    df["Performance"]= df.apply(my_functon, axis=1)
+    return df
 
 
 # Sample dataset
@@ -22,5 +32,8 @@ df = pd.DataFrame({
     "Attendance": [0.95, 0.80, 0.90, 0.70, 0.75, 0.98]
 })
 
-print(assign_letter_grades(df))
 
+
+print(assign_letter_grades(df))
+print(calculate_adjusted_score(df))
+print(categorize_performance(df))
